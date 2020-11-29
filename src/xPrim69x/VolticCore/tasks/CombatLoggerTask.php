@@ -17,12 +17,11 @@ class CombatLoggerTask extends Task {
 	public function onRun(int $currentTick) : void{
 		foreach($this->main->combat as $name => $time){
 			$time--;
+			$player = $this->main->getServer()->getPlayer($name);
+			if($player instanceof Player) $player->setXpLevel($time);
 			if($time <= 0){
 				$this->main->getUtils()->setTagged($name, false);
-				$player = $this->main->getServer()->getPlayer($name);
-				if($player instanceof Player){
-					$player->sendMessage($this->main->getConfig()->get("combat-leave"));
-				}
+				if($player instanceof Player) $player->sendMessage($this->main->getConfig()->get("combat-leave"));
 				return;
 			}
 			$this->main->combat[$name]--;
