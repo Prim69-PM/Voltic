@@ -1,0 +1,17 @@
+{
+	"Owner": {
+		"inherits": [],
+		"permissions": [
+			"kit.cmd",
+			"example.permission"
+		],
+		"nametag": "§4[Owner] §c{name}",
+		"chat": "§4[Owner] §c{name}: {msg}"
+	},
+	"Player": {
+		"inherits": [],
+		"permissions": [],
+		"nametag": "§7[Player] §f{name}",
+		"chat": "§7[Player] §f{name}: {msg}"
+	}
+}

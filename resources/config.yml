@@ -1,0 +1,40 @@
+#List of death messages that will be randomized
+death-messages:
+  - was slaughtered by
+  - took an L to
+  - got railed by
+  - was folded by
+  - got tossed by
+  - was clowned on by
+
+#The color for the death messages
+#Available variables: {player}, {msg}, {killer}, {hp}
+#Player is the player that died, msg is the random chosen message, hp is the killers remaining health.
+format: "§c{player} §3{msg} §c{killer} §7[{hp} HP]"
+
+#The cooldown in seconds of slime blocks launching you in the air.
+slime-cooldown: 15
+
+#Use {slimecooldown} to replace the seconds left in the cooldown.
+slimecooldown-message: "You are on cooldown! You can use this ability again in {slimecooldown} seconds!"
+
+#Use {amount-cleared} for the amount of entities that were cleared.
+#Use true / false, if broadcast cleared is true, a mesage will be broadcasted each time entities are cleared
+broadcast-cleared: true
+
+#This will only work if broadcast-cleared is set to true
+clear-entities-message: "{amount-cleared} §bentities were cleared."
+
+#The interval in seconds to clear entities
+clear-entities-interval: 300
+
+#If the default rank does not exist in ranks.json it will automatically be created.
+#IMPORTANT >> Default rank is case sensitive. << IMPORTANT
+default-rank: "Player"
+
+#Commands to unregister (disable), don't add the /
+commands-unregistered:
+  - 'me'
+  - 'reload'
+  - 'seed'
+  - 'particle'

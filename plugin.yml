@@ -1,0 +1,32 @@
+name: VasarCore
+author: xPrim69x
+website: https://github.com/Prim69
+description: Vasars KitPvP Core made by xPrim69x!
+version: 1.0.0
+main: xPrim69x\VolticCore\Main
+api: [3.0.0]
+permissions:
+  area.command:
+    description: Permission to use /area
+    default: op
+  setmoney.command:
+    description: Permission to use /setmoney
+    default: op
+  removemoney.command:
+    description: Permission to use /removemoney
+    default: op
+  addmoney.command:
+    description: Permission to use /addmoney
+    default: op
+  setrank.command:
+    description: Permission to use /setrank
+    default: op
+  addrank.command:
+    description: Permission to use /addrank
+    default: op
+  delrank.command:
+    description: Permission to use /delrank
+    default: op
+  vault.edit.other:
+    description: Allows editing of other players vaults.
+    default: op

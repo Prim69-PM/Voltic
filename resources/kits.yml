@@ -1,0 +1,41 @@
+
+#Format - name:meta:amount:custom_name:enchant:level
+#For multiple enchants do it like this - name:meta:amount:custom_name:enchant:level:enchant2:level2:enchant3:level3
+#If you dont want a custom name put DEFAULT in the spot
+#For no custom name or enchants - name:meta:amount
+#For a custom name and no enchants - name:meta:amount:name
+#IMPORTANT: if youre using slots you need atleast 1 item set in items:
+testkit:
+  items:
+    - 'diamond_sword:0:1'
+    - 'golden_apple:0:12'
+  helmet: 'diamond_helmet:0:1:DEFAULT:protection:1'
+  chestplate: 'diamond_chestplate:0:1:DEFAULT:protection:1'
+  leggings: 'diamond_leggings:0:1:DEFAULT:protection:1'
+  boots: 'diamond_boots:0:1:DEFAULT:protection:1'
+  cooldown:
+    hours: 0
+    minutes: 1
+  price: 60
+
+#Slots will override items:
+#Format for effects is - 'name or id:seconds:multiplier'
+#If you're getting any errors keep in mind allignment does matter (how far each thing is indented)
+#If you want a custom name for the kit when the player does /form (default will be the kits name) add form-name:
+#Permission makes it only available to people with that permission, give people permissions based on their rank in ranks.json
+testkit2:
+  items:
+    - 'stone_sword:0:1'
+  slots:
+    0: 'stone_sword:0:1'
+    1: 'golden_apple:0:1'
+  helmet: 'iron_helmet:0:1:DEFAULT:protection:1:unbreaking:1'
+  boots: 'iron_boots:0:1:DEFAULT:protection:1:unbreaking:1'
+  effects:
+    - 'speed:20:1'
+    - 'jump_boost:20:1'
+  cooldown:
+    hours: 0
+    minutes: 1
+  permission: 'kit.permission'
+  form-name: '§l§dTest Kit 2'
