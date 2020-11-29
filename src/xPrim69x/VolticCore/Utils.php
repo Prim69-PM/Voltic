@@ -74,4 +74,23 @@ class Utils {
 		})) / $dt, $rp);
 	}
 
+	public function setTagged($player, bool $value = true, int $time = 15){
+		if($player instanceof Player) $player = $player->getName();
+		if($value){
+			Main::getInstance()->combat[$player] = $time;
+			return;
+		}
+		unset(Main::getInstance()->combat[$player]);
+	}
+
+	public function isTagged($player){
+		if($player instanceof Player) $player = $player->getName();
+		return isset(Main::getInstance()->combat[$player]);
+	}
+
+	public function getLength($player){
+		if($player instanceof Player) $player = $player->getName();
+		return $this->isTagged($player) ? Main::getInstance()->combat[$player] : 0;
+	}
+
 }

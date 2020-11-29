@@ -28,6 +28,26 @@ clear-entities-message: "{amount-cleared} §bentities were cleared."
 #The interval in seconds to clear entities
 clear-entities-interval: 300
 
+##Below is the configuration for the combat logger:
+
+#How long the combat timer lasts for (in seconds)
+combat-time: 15
+
+#The message sent to the player when they enter combat
+combat-message: 'You are now in combat!'
+
+#The message sent to the player when they are out of combat
+combat-leave: 'You are now out of combat!'
+
+#The message sent to the player when they try to use a disallowed command in combat
+command-message: "You cannot use this command while in combat!"
+
+#Commands to disallow in combat (cant use these commands in combat)
+combat-commands:
+  - spawn
+  - hub
+  - kit
+
 #If the default rank does not exist in ranks.json it will automatically be created.
 #IMPORTANT >> Default rank is case sensitive. << IMPORTANT
 default-rank: "Player"

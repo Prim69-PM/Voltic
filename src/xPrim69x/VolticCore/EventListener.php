@@ -2,10 +2,12 @@
 
 namespace xPrim69x\VolticCore;
 
+use pocketmine\command\Command;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\{PlayerChatEvent,
+	PlayerCommandPreprocessEvent,
 	PlayerDeathEvent,
 	PlayerExhaustEvent,
 	PlayerJoinEvent,
@@ -13,9 +15,11 @@ use pocketmine\event\player\{PlayerChatEvent,
 	PlayerMoveEvent,
 	PlayerQuitEvent};
 use pocketmine\event\server\DataPacketReceiveEvent;
+use pocketmine\network\mcpe\protocol\EmotePacket;
 use pocketmine\network\mcpe\protocol\InventoryTransactionPacket;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\Player;
+use pocketmine\Server;
 use pocketmine\utils\TextFormat as TF;
 use pocketmine\math\Vector3;
 use xPrim69x\VolticCore\tasks\ScoreboardTask;
@@ -41,6 +45,20 @@ class EventListener implements Listener {
 		}
 	}
 
+	public function damageByEntity(EntityDamageByEntityEvent $event){
+		$player = $event->getEntity();
+		$attacker = $event->getDamager();
+		if($player instanceof Player && $attacker instanceof Player){
+			foreach([$player, $attacker] as $p){
+				if(!$p instanceof Player) return;
+				if(!$this->main->getUtils()->isTagged($p)){
+					$p->sendMessage($this->main->getConfig()->get("combat-message"));
+				}
+				$this->main->getUtils()->setTagged($p);
+			}
+		}
+	}
+
 	public function onExhaust(PlayerExhaustEvent $event){
 		$event->setCancelled();
 	}
@@ -60,6 +78,7 @@ class EventListener implements Listener {
 		$player = $event->getPlayer();
 		$name = $player->getName();
 		$event->setQuitMessage(TF::DARK_RED . '-' . TF::RED . " $name");
+		if($this->main->getUtils()->isTagged($player)) $player->kill();
 		Utils::removeFromArray($player);
 	}
 
@@ -75,6 +94,25 @@ class EventListener implements Listener {
 		$chat = new Chat($this->main);
 		$format = $chat->getFormat($player, $msg);
 		$event->setFormat($format);
+	}
+
+	public function preProcess(PlayerCommandPreProcessEvent $event){
+		$msg = $event->getMessage();
+		if(isset($msg[1])){
+			if($msg[0] === "/" && $msg[1] === " ") $event->setCancelled();
+		}
+		$player = $event->getPlayer();
+		if($this->main->getUtils()->isTagged($player)){
+			if($msg[0] === "/"){
+				$args = array_map("stripslashes", str_getcsv(substr($msg, 1), " "));
+				$label = "";
+				$target = $this->main->getServer()->getCommandMap()->matchCommand($label, $args);
+				if($target instanceof Command && in_array(strtolower($label), $this->main->getConfig()->get("combat-commands"))){
+					$event->setCancelled();
+					$player->sendMessage($this->main->getConfig()->get("command-message"));
+				}
+			}
+		}
 	}
 
 	public function onMove(PlayerMoveEvent $event){
@@ -97,6 +135,7 @@ class EventListener implements Listener {
 
 	public function onDeath(PlayerDeathEvent $event){
 		$player = $event->getPlayer();
+		if($this->main->getUtils()->isTagged($player)) $this->main->getUtils()->setTagged($player, false);
 		if($player instanceof Player){
 			$this->main->getDBClass()->addDeaths($player, 1);
 			$name = $player->getName();
@@ -135,6 +174,10 @@ class EventListener implements Listener {
 				$clicks = $utils->getClicks($player);
 				$player->sendTip("§9CPS: §f$clicks");
 			}
+		}
+		if($packet instanceof EmotePacket){
+			$emote = $packet->getEmoteId();
+			Server::getInstance()->broadcastPacket($player->getViewers(), EmotePacket::create($player->getId(), $emote, 1 << 0));
 		}
 	}
 

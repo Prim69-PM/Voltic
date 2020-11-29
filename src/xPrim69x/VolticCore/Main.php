@@ -6,7 +6,8 @@ use muqsit\invmenu\InvMenuHandler;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
-use xPrim69x\VolticCore\commands\{AddMoneyCommand,
+use xPrim69x\VolticCore\commands\{
+	AddMoneyCommand,
 	AddRankCommand,
 	AreaCommand,
 	BalanceCommand,
@@ -17,16 +18,20 @@ use xPrim69x\VolticCore\commands\{AddMoneyCommand,
 	RankListCommand,
 	RemoveMoneyCommand,
 	SetMoneyCommand,
-	SetRankCommand};
+	SetRankCommand,
+	SpawnCommand
+};
 use xPrim69x\VolticCore\kits\Kit;
 use xPrim69x\VolticCore\kits\KitManager;
 use xPrim69x\VolticCore\tasks\ClearEntitiesTask;
+use xPrim69x\VolticCore\tasks\CombatLoggerTask;
 use xPrim69x\VolticCore\tasks\CooldownTask;
 use xPrim69x\VolticCore\utils\Scoreboards;
 
 class Main extends PluginBase{
 
 	public $cooldown = [1 => [], 2 => [], 3 => []];
+	public $combat = [];
 	public $clicks = [];
 	public $areas = [];
 	public $pos1 = [];
@@ -50,6 +55,7 @@ class Main extends PluginBase{
 		$this->saverank();
 		$this->init();
 		$this->getScheduler()->scheduleRepeatingTask(new ClearEntitiesTask($this), $this->getConfig()->get("clear-entities-interval") * 20);
+		$this->getScheduler()->scheduleRepeatingTask(new CombatLoggerTask($this), 20);
 		$this->getScheduler()->scheduleDelayedRepeatingTask(new CooldownTask($this->getKitManager()), 1200, 1200);
 	}
 
@@ -58,6 +64,7 @@ class Main extends PluginBase{
 			if($kit instanceof Kit) $kit->save();
 		}
 		$this->getKitManager()->kits = [];
+		$this->combat = [];
 	}
 
 	public function registerCommands(){
@@ -73,7 +80,8 @@ class Main extends PluginBase{
 			new AddRankCommand($this),
 			new DelRankCommand($this),
 			new RankListCommand($this),
-			new KitCommand($this)
+			new KitCommand($this),
+			new SpawnCommand($this)
 		]);
 	}
 
