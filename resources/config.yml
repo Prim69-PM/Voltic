@@ -16,7 +16,19 @@ format: "§c{player} §3{msg} §c{killer} §7[{hp} HP]"
 slime-cooldown: 15
 
 #Use {slimecooldown} to replace the seconds left in the cooldown.
-slimecooldown-message: "You are on cooldown! You can use this ability again in {slimecooldown} seconds!"
+slimecooldown-message: "§eYou are on cooldown! You can use this ability again in {slimecooldown} seconds!"
+
+#The cooldown in seconds for ender pearls
+pearl-cooldown: 15
+
+#Use {pearlcooldown} to replace the seconds left in the cooldown.
+pearlcd-message: "§9You are on cooldown! You can throw an ender pearl again in §b{pearlcooldown} §9seconds!"
+
+#The cooldown in seconds for golden apples
+gapple-cooldown: 15
+
+#Use {gapplecooldown} to replace the seconds left in the cooldown.
+gapplecd-message: "§gYou are on cooldown! You can eat a Golden Apple again in §c{gapplecooldown} §gseconds!"
 
 #Use {amount-cleared} for the amount of entities that were cleared.
 #Use true / false, if broadcast cleared is true, a mesage will be broadcasted each time entities are cleared
@@ -34,13 +46,13 @@ clear-entities-interval: 300
 combat-time: 15
 
 #The message sent to the player when they enter combat
-combat-message: 'You are now in combat!'
+combat-message: '§cYou are now in combat!'
 
 #The message sent to the player when they are out of combat
-combat-leave: 'You are now out of combat!'
+combat-leave: '§aYou are now out of combat!'
 
 #The message sent to the player when they try to use a disallowed command in combat
-command-message: "You cannot use this command while in combat!"
+command-message: "§cYou cannot use this command while in combat!"
 
 #Commands to disallow in combat (cant use these commands in combat)
 combat-commands:

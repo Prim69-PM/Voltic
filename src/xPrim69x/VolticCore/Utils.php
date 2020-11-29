@@ -10,6 +10,8 @@ class Utils {
 	const PEARLCD = 2;
 	const GAPPLECD = 3;
 
+	const CDLIST = [null, "slime-cooldown", "pearl-cooldown", "gapple-cooldown"];
+
 	public static function validName(string $name){
 		return preg_match('/[0-9a-zA-Z\xA1-\xFE]$/', $name);
 	}
@@ -17,8 +19,8 @@ class Utils {
 	public static function hasCooldown(Player $player, int $type){
 		$main = Main::getInstance();
 		$name = $player->getName();
-		if(isset($main->cooldown[$type][$name]) && time() - $main->cooldown[$type][$name] < $main->getConfig()->get("slime-cooldown"))
-			return true;
+		$cd = $main->getConfig()->get(self::CDLIST[$type]);
+		if(isset($main->cooldown[$type][$name]) && time() - $main->cooldown[$type][$name] < $cd) return true;
 		self::removeCooldown($player, $type);
 		return false;
 	}
@@ -38,8 +40,10 @@ class Utils {
 
 	public static function getCooldown(Player $player, int $type){
 		$main = Main::getInstance();
-		if(isset($main->cooldown[$type][$player->getName()]))
-			return $main->getConfig()->get("slime-cooldown") - (time() - $main->cooldown[$type][$player->getName()]);
+		if(isset($main->cooldown[$type][$player->getName()])){
+			$cd = $main->getConfig()->get(self::CDLIST[$type]);
+			return $cd - (time() - $main->cooldown[$type][$player->getName()]);
+		}
 		return 0;
 	}
 

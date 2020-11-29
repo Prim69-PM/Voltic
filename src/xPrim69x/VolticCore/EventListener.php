@@ -3,18 +3,23 @@
 namespace xPrim69x\VolticCore;
 
 use pocketmine\command\Command;
+use pocketmine\entity\projectile\EnderPearl;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\{PlayerChatEvent,
 	PlayerCommandPreprocessEvent,
 	PlayerDeathEvent,
 	PlayerExhaustEvent,
+	PlayerInteractEvent,
+	PlayerItemConsumeEvent,
 	PlayerJoinEvent,
 	PlayerLoginEvent,
 	PlayerMoveEvent,
 	PlayerQuitEvent};
 use pocketmine\event\server\DataPacketReceiveEvent;
+use pocketmine\item\GoldenApple;
 use pocketmine\network\mcpe\protocol\EmotePacket;
 use pocketmine\network\mcpe\protocol\InventoryTransactionPacket;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
@@ -61,6 +66,47 @@ class EventListener implements Listener {
 
 	public function onExhaust(PlayerExhaustEvent $event){
 		$event->setCancelled();
+	}
+
+	public function onLaunch(ProjectileLaunchEvent $event){
+		$entity = $event->getEntity();
+		if($entity instanceof EnderPearl){
+			$entity->setMotion($entity->getMotion()->multiply(1.5));
+		}
+	}
+
+	public function onInteract(PlayerInteractEvent $event){
+		$player = $event->getPlayer();
+		if($event->getAction() === 3){ //3 is right click air
+			$item = $event->getItem();
+			if($item->getId() === 368){
+				if(Utils::hasCooldown($player, 2)){ //2 is pearl cd
+					$event->setCancelled();
+					$cd = Utils::getCooldown($player, 2);
+					$msg = $this->main->getConfig()->get("pearlcd-message");
+					$msg = str_replace("{pearlcooldown}", $cd, $msg);
+					$player->sendMessage($msg);
+				} else {
+					Utils::addCooldown($player, 2);
+				}
+			}
+		}
+	}
+
+	public function onConsume(PlayerItemConsumeEvent $event){
+		$player = $event->getPlayer();
+		$item = $event->getItem();
+		if($item instanceof GoldenApple){
+			if(Utils::hasCooldown($player, 3)){ //3 is gapple cd
+				$event->setCancelled();
+				$cd = Utils::getCooldown($player, 3);
+				$msg = $this->main->getConfig()->get("gapplecd-message");
+				$msg = str_replace("{gapplecooldown}", $cd, $msg);
+				$player->sendMessage($msg);
+			} else {
+				Utils::addCooldown($player, 3);
+			}
+		}
 	}
 
 	public function onJoin(PlayerJoinEvent $event){
