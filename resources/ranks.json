@@ -6,12 +6,12 @@
 			"example.permission"
 		],
 		"nametag": "§4[Owner] §c{name}",
-		"chat": "§4[Owner] §c{name}: {msg}"
+		"chat": "§f{faction}§4[Owner] §c{name}: {msg}"
 	},
 	"Player": {
 		"inherits": [],
 		"permissions": [],
 		"nametag": "§7[Player] §f{name}",
-		"chat": "§7[Player] §f{name}: {msg}"
+		"chat": "§f{faction}§7[Player] §f{name}: {msg}"
 	}
 }

@@ -70,3 +70,12 @@ commands-unregistered:
   - 'reload'
   - 'seed'
   - 'particle'
+
+
+#Below is the config for factions
+
+#This is the max length that a factions name can be
+faction-max-length: 15
+
+#The max amount of members that can be in a faction
+faction-max-members: 10
