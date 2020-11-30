@@ -118,6 +118,8 @@ class EventListener implements Listener {
 		$this->main->setPerms($player);
 		$this->main->getScheduler()->scheduleRepeatingTask(new ScoreboardTask($this->main, $player), 40);
 		Utils::addToArray($player);
+		$chat = new Chat($this->main);
+		$player->setNameTag($chat->getNametag($player));
 	}
 
 	public function onQuit(PlayerQuitEvent $event){
@@ -148,7 +150,7 @@ class EventListener implements Listener {
 			$msg = TF::BOLD . TF::GREEN . "[FAC]" . TF::RESET . TF::GREEN . " [$rank] $name: $msg";
 			$fac = $db->getFaction($player);
 			$members = $db->getMembers($fac);
-			var_dump($members);
+			var_dump($members); //NEED TO FINISH THIS
 			$event->setRecipients($members);
 			$event->setFormat($msg);
 		}

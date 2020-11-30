@@ -2,7 +2,6 @@
 
 namespace xPrim69x\VolticCore;
 
-use muqsit\invmenu\InvMenuHandler;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -107,8 +106,6 @@ class Main extends PluginBase{
 		foreach($areas as $area){
 			new Area($area['name'], new Vector3($area['pos1'][0], $area['pos1'][1], $area['pos1'][2]), new Vector3($area['pos2'][0], $area['pos2'][1], $area['pos2'][2]), $area["level"], $this);
 		}
-		if(!InvMenuHandler::isRegistered())
-			InvMenuHandler::register($this);
 		$this->getKitManager()->loadKits();
 	}
 
@@ -168,6 +165,7 @@ class Main extends PluginBase{
 		foreach($newperms as $perm){
 			$player->addAttachment($this, $perm, true);
 		}
+		$player->setNameTag($this->getChat()->getNametag($player));
 	}
 
 	public static function getInstance() : Main{

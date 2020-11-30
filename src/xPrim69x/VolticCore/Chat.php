@@ -20,13 +20,29 @@ class Chat {
 		return $this->translate($df, $player, $message);
 	}
 
+	public function getNametag(Player $player){
+		$fl = json_decode(file_get_contents($this->main->getDataFolder() . "ranks.json"), true);
+		$rank = $this->main->getDBClass()->getRank($player);
+		$nametag = $fl[$rank]["nametag"];
+		return $this->translateNametag($player, $nametag);
+	}
+
 	public function translate(string $format, Player $player, string $message){
+		$fac = $this->main->getDBClass()->getFaction($player);
 		if (!$player->hasPermission("pchat.coloredMessages")) {
 			$format = str_replace("{msg}", $this->strip($message), $format);
 		} else {
 			$format = str_replace("{msg}", $message, $format);
 		}
 		$format = str_replace("{name}", $player->getName(), $format);
+		$format = str_replace("{faction}", $fac, $format);
+		return $format;
+	}
+
+	public function translateNametag(Player $player, string $format){
+		$fac = $this->main->getDBClass()->getFaction($player);
+		$format = str_replace("{name}", $player->getName(), $format);
+		$format = str_replace("{faction}", $fac, $format);
 		return $format;
 	}
 
