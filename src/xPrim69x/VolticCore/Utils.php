@@ -13,7 +13,7 @@ class Utils {
 	const CDLIST = [null, "slime-cooldown", "pearl-cooldown", "gapple-cooldown"];
 
 	public static function validName(string $name){
-		return preg_match('/[0-9a-zA-Z\xA1-\xFE]$/', $name);
+		return preg_match('/[^a-zA-Z0-9]+/', $name) == false;
 	}
 
 	public static function hasCooldown(Player $player, int $type){

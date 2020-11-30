@@ -34,7 +34,8 @@ class ScoreboardTask extends Task {
 		$ping = $player->getPing();
 		$on = count($this->main->getServer()->getOnlinePlayers());
 		$rank = $pc->getDBClass()->getRank($player);
-		$facrank = $pc->getDBClass()->getFacRank($player);
+		$facrank = $pc->getDBClass()->getFactionRank($player);
+		$faction = $pc->getDBClass()->getPlayerFaction($player);
 
 		$lines = [
 			1 => "§9K: §f$kills §9D: §f$deaths",
@@ -43,7 +44,7 @@ class ScoreboardTask extends Task {
 			4 => "§9Online: §f$on",
 			5 => "--------------",
 			6 => "§9Rank: §f$rank",
-			7 => "§9Faction: §fTODO",
+			7 => "§9Faction: §f$faction",
 			8 => "§9Faction Rank: §f$facrank",
 			9 => "§9Money: §f$$money"
 		];

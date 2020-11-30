@@ -140,6 +140,18 @@ class EventListener implements Listener {
 		$chat = new Chat($this->main);
 		$format = $chat->getFormat($player, $msg);
 		$event->setFormat($format);
+		$db = $this->main->getDBClass();
+		if($db->inFaction($player) && $msg[0] === "*"){
+			$msg = str_replace("*", null, $msg);
+			$rank = $db->getFactionRank($player);
+			$name = $player->getName();
+			$msg = TF::BOLD . TF::GREEN . "[FAC]" . TF::RESET . TF::GREEN . " [$rank] $name: $msg";
+			$fac = $db->getFaction($player);
+			$members = $db->getMembers($fac);
+			var_dump($members);
+			$event->setRecipients($members);
+			$event->setFormat($msg);
+		}
 	}
 
 	public function preProcess(PlayerCommandPreProcessEvent $event){

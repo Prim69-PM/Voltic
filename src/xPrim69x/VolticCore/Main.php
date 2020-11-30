@@ -6,21 +6,19 @@ use muqsit\invmenu\InvMenuHandler;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
-use xPrim69x\VolticCore\commands\{
-	AddMoneyCommand,
+use xPrim69x\VolticCore\commands\{AddMoneyCommand,
 	AddRankCommand,
 	AreaCommand,
 	BalanceCommand,
 	DelRankCommand,
+	FactionCommand,
 	KitCommand,
 	PayCommand,
-	PlayerVaultCommand,
 	RankListCommand,
 	RemoveMoneyCommand,
 	SetMoneyCommand,
 	SetRankCommand,
-	SpawnCommand
-};
+	SpawnCommand};
 use xPrim69x\VolticCore\kits\Kit;
 use xPrim69x\VolticCore\kits\KitManager;
 use xPrim69x\VolticCore\tasks\ClearEntitiesTask;
@@ -37,6 +35,7 @@ class Main extends PluginBase{
 	public $pos1 = [];
 	public $pos2 = [];
 
+	private $factionmanager;
 	private $kitmanager;
 	private $dbclass;
 	private $utils;
@@ -70,7 +69,6 @@ class Main extends PluginBase{
 	public function registerCommands(){
 		$this->getServer()->getCommandMap()->registerAll($this->getName(), [
 			new AreaCommand($this),
-			new PlayerVaultCommand($this),
 			new PayCommand($this),
 			new BalanceCommand($this),
 			new SetMoneyCommand($this),
@@ -81,7 +79,8 @@ class Main extends PluginBase{
 			new DelRankCommand($this),
 			new RankListCommand($this),
 			new KitCommand($this),
-			new SpawnCommand($this)
+			new SpawnCommand($this),
+			new FactionCommand($this)
 		]);
 	}
 
@@ -98,6 +97,7 @@ class Main extends PluginBase{
 	public function init(){
 		$this->chat = new Chat($this);
 		$this->kitmanager = new KitManager($this);
+		$this->factionmanager = new FactionManager($this);
 		$this->dbclass = new Database($this);
 		$this->dbclass->preparedb();
 		$this->utils = new Utils();
@@ -136,10 +136,6 @@ class Main extends PluginBase{
 		}
 	}
 
-	public static function getInstance() : Main{
-		return self::$instance;
-	}
-
 	public function saveAreas(){
 		$areas = [];
 		foreach($this->areas as $area){
@@ -174,8 +170,20 @@ class Main extends PluginBase{
 		}
 	}
 
+	public static function getInstance() : Main{
+		return self::$instance;
+	}
+
+	public function getFactionManager() : FactionManager {
+		return $this->factionmanager;
+	}
+
 	public function getKitManager() : KitManager{
 		return $this->kitmanager;
+	}
+
+	public function getDBClass() : Database {
+		return $this->dbclass;
 	}
 
 	public function getUtils() : Utils{
@@ -184,10 +192,6 @@ class Main extends PluginBase{
 
 	public function getChat() : Chat{
 		return $this->chat;
-	}
-
-	public function getDBClass() : Database {
-		return $this->dbclass;
 	}
 
 }
