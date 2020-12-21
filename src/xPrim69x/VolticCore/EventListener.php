@@ -150,7 +150,6 @@ class EventListener implements Listener {
 			$msg = TF::BOLD . TF::GREEN . "[FAC]" . TF::RESET . TF::GREEN . " [$rank] $name: $msg";
 			$fac = $db->getFaction($player);
 			$members = $db->getMembers($fac);
-			var_dump($members); //NEED TO FINISH THIS
 			$event->setRecipients($members);
 			$event->setFormat($msg);
 		}
