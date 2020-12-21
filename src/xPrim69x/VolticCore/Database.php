@@ -196,11 +196,23 @@ class Database {
 		return $officers['player'];
 	}
 
-	public function getMembers(string $faction) { #NEED TO FIX THIS
-		$member = $this->facdb->query("SELECT player FROM master WHERE faction='$faction'");
-		$members = $member->fetchArray(1);
-		return $members['player'];
-	}
+	public function getMembers(string $faction) {
+                $result = $this->facdb->query("SELECT player FROM master WHERE faction='$faction'");
+
+                $list = [];
+                $row = [];
+                $i = 0;
+
+            while($resultArr = $result->fetchArray(SQLITE3_ASSOC)){
+                $row[$i]['player'] = $resultArr['player'];
+                $uuid = UUID::fromString($row[$i]['player']);
+                $p = Server::getInstance()->getPlayerByUUID($uuid);
+                if($p instanceof Player) $list[] = $p;
+                $i++;
+               }
+               return $list;
+        }
+
 
 	public function setFacRank(Player $player, string $faction, string $rank){
 		$uuid = $player->getUniqueId()->toString();
